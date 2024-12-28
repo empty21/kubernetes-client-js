@@ -5,6 +5,14 @@
 [![Client Support Level](https://img.shields.io/badge/kubernetes%20client-beta-green.svg?style=flat&colorA=306CE8)](https://bit.ly/kubernetes-client-support-badge)
 [![Build and Deploy Docs](https://github.com/kubernetes-client/javascript/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/kubernetes-client/javascript/actions/workflows/deploy-docs.yml)
 
+**This package forked from @kubernetes/client-node, to replace deprecated `request` package as `postman-request`**
+Package is published as `kubernetes-client-js`
+Package has following changes:
+
+- Replaced `request` with `postman-request`
+- Patched for [CVE-2023-26136](https://nvd.nist.gov/vuln/detail/CVE-2023-26136)
+- Fix `KubernetesObjectSerializer::deserialize()` to support `KubernetesObjectList`
+
 The Javascript clients for Kubernetes is implemented in
 [typescript](https://typescriptlang.org), but can be called from either
 Javascript or Typescript. The client is implemented for server-side use with Node.
@@ -14,7 +22,10 @@ The `request` library is currently being swapped to `fetch`. See the [fetch migr
 # Installation
 
 ```console
-npm install @kubernetes/client-node
+# Install as alias
+npm install @kubernetes/client-node@npm:kubernetes-client-js
+# Install as package
+npm install kubernetes-client-js
 ```
 
 # Example code
@@ -39,7 +50,6 @@ const main = async () => {
 };
 
 main();
-
 ```
 
 ## Create a new namespace
@@ -76,6 +86,7 @@ main();
 ```
 
 ## Create a cluster configuration programatically
+
 ```javascript
 const k8s = require('@kubernetes/client-node');
 
@@ -124,32 +135,34 @@ release, we will increment the minor version whenever we update the minor Kubern
 Generally speaking newer clients will work with older Kubernetes, but compatability isn't 100% guaranteed.
 
 | client version | older versions | 1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27 | 1.28 | 1.29 | 1.30 |
-|----------------|----------------|------|------|------|-------|------|-----|------|------|-----|
-|  0.16.x        |       -        |  ✓   |  x   |  x   |  x  |  x  |  x  |  x  |  x  |  x  |
-|  0.17.x        |       -        |  +   |  +   |  ✓   |  x  |  x  |  x  |  x  |  x  |  x  |
-|  0.18.x        |       -        |  +   |  +   |  +   |  ✓  |  x  |  x  |  x  |  x  |  x  |
-|  0.19.x        |       -        |  -   |  -   |  -   |  +  |  +  |  ✓  |  x  |  x  |  x  |
-|  0.20.x        |       -        |  -   |  -   |  -   |  -  |  +  |  +  |  ✓  |  x  |  x  |
-|  0.21.x        |       -        |  -   |  -   |  -   |  -  |  -  |  +  |  +  |  ✓  |  x  |
-|  0.22.x        |       -        |  -   |  -   |  -   |  -  |  -  |  -  |  +  |  +  |  ✓  |
+| -------------- | -------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 0.16.x         | -              | ✓    | x    | x    | x    | x    | x    | x    | x    | x    |
+| 0.17.x         | -              | +    | +    | ✓    | x    | x    | x    | x    | x    | x    |
+| 0.18.x         | -              | +    | +    | +    | ✓    | x    | x    | x    | x    | x    |
+| 0.19.x         | -              | -    | -    | -    | +    | +    | ✓    | x    | x    | x    |
+| 0.20.x         | -              | -    | -    | -    | -    | +    | +    | ✓    | x    | x    |
+| 0.21.x         | -              | -    | -    | -    | -    | -    | +    | +    | ✓    | x    |
+| 0.22.x         | -              | -    | -    | -    | -    | -    | -    | +    | +    | ✓    |
 
 Key:
-* `✓` Exactly the same features / API objects in both javascript-client and the Kubernetes
+
+- `✓` Exactly the same features / API objects in both javascript-client and the Kubernetes
   version.
-* `+` javascript-client has features or api objects that may not be present in the
+- `+` javascript-client has features or api objects that may not be present in the
   Kubernetes cluster, but everything they have in common will work.
-* `-` The Kubernetes cluster has features the javascript-client library can't use
+- `-` The Kubernetes cluster has features the javascript-client library can't use
   (additional API objects, etc).
-* `x` The Kubernetes cluster has no guarantees to support the API client of
+- `x` The Kubernetes cluster has no guarantees to support the API client of
   this version, as it only promises _n_-2 version support. It is not tested,
   and operations using API versions that have been deprecated and removed in
   later server versions won't function correctly.
 
 # Known Issues
-* Multiple kubeconfigs are not completely supported.
+
+- Multiple kubeconfigs are not completely supported.
   Credentials are cached based on the kubeconfig username and these can collide across configs.
   Here is the related [issue](https://github.com/kubernetes-client/javascript/issues/592).
-* The client wasn't generated for Kubernetes 1.23 due to limited time from the maintainer(s)
+- The client wasn't generated for Kubernetes 1.23 due to limited time from the maintainer(s)
 
 # Development
 
